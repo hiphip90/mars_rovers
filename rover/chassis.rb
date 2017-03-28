@@ -1,4 +1,4 @@
-class RoverChassis
+class Rover::Chassis
   attr_reader :rover
 
   def initialize(rover)

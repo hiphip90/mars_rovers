@@ -1,4 +1,4 @@
-class RoverControlUnit
+class Rover::ControlUnit
   attr_accessor :chassis, :rover, :guidance_unit
 
   def initialize(rover, chassis, guidance_unit)

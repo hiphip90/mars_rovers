@@ -1,7 +1,7 @@
 require_relative 'rover'
-require_relative 'rover_chassis'
-require_relative 'rover_control_unit'
-require_relative 'rover_guidance_unit'
+require_relative 'rover/chassis'
+require_relative 'rover/control_unit'
+require_relative 'rover/guidance_unit'
 
 class MissionControl
   attr_reader :rovers
@@ -39,18 +39,20 @@ class MissionControl
     rovers.find { |rover| rover.id == id }
   end
 
-  def tile_free?(x, y)
+  def tile_free?(x, y, current_rover_id = nil)
     return false if (x < 0 || y < 0)
-    rovers.none? { |rover| rover.x == x && rover.y == y }
+    rovers.none? do |rover|
+      rover.id != current_rover_id && rover.x == x && rover.y == y
+    end
   end
 
   private
 
   def assemble_new_rover
     rover = Rover.new(next_id, *determine_landing_site)
-    rover.chassis = RoverChassis.new(rover)
-    guidance_unit = RoverGuidanceUnit.new(self)
-    rover.control_unit = RoverControlUnit.new(rover, rover.chassis, guidance_unit)
+    rover.chassis = Rover::Chassis.new(rover)
+    guidance_unit = Rover::GuidanceUnit.new(self, rover)
+    rover.control_unit = Rover::ControlUnit.new(rover, rover.chassis, guidance_unit)
     rover
   end
 
