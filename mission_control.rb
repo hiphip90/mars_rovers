@@ -1,6 +1,7 @@
 require_relative 'rover'
 require_relative 'rover_chassis'
 require_relative 'rover_control_unit'
+require_relative 'rover_guidance_unit'
 
 class MissionControl
   attr_reader :rovers
@@ -18,26 +19,24 @@ class MissionControl
     rover.report_position
   end
 
-  def send_instructions_to_rover(id, instructions)
-    rover = open_comm_channel_with_rover(id)
-    rover.receive(instructions)
-  end
-
-  def open_comm_channel_with_rover(id)
-    rovers.find { |rover| rover.id == id }
-  end
-
   def list_rovers
     rovers.each(&:report_position)
   end
 
-  def report_rover_manual
-    RoverControlUnit.report_manual
+  def send_command_to_rover(id, command)
+    open_comm_channel_with_rover(id).receive(command)
+  end
+
+  def report_rover_manual(id)
+    open_comm_channel_with_rover(id).report_manual
   end
 
   def report_rover_position(id)
-    rover = open_comm_channel_with_rover(id)
-    rover.report_position
+    open_comm_channel_with_rover(id).report_position
+  end
+
+  def open_comm_channel_with_rover(id)
+    rovers.find { |rover| rover.id == id }
   end
 
   def tile_free?(x, y)
@@ -50,7 +49,8 @@ class MissionControl
   def assemble_new_rover
     rover = Rover.new(next_id, *determine_landing_site)
     rover.chassis = RoverChassis.new(rover)
-    rover.control_unit = RoverControlUnit.new(rover.chassis, rover)
+    guidance_unit = RoverGuidanceUnit.new(self)
+    rover.control_unit = RoverControlUnit.new(rover, rover.chassis, guidance_unit)
     rover
   end
 

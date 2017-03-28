@@ -8,8 +8,8 @@ class Rover
     @heading = 'N'
   end
 
-  def receive(instructions)
-    control_unit.execute_instructions(instructions)
+  def receive(command)
+    control_unit.execute_command(command)
   end
 
   def report_manual
@@ -17,20 +17,20 @@ class Rover
   end
 
   def report_position
-    puts "##### Rover ##{id} #####"
-    puts "X: #{x}"
-    puts "Y: #{y}"
-    puts "Heading: #{heading}"
-    puts '####################'
-  end
-
-  def report_error
-    puts "##### Rover ##{id} #####"
-    puts 'Unknown instruction, standing by'
-    puts '####################'
+    report do
+      puts "X: #{x}"
+      puts "Y: #{y}"
+      puts "Heading: #{heading}"
+    end
   end
 
   def <=>(other)
     id <=> other.id
+  end
+
+  def report
+    puts "##### Rover ##{id} #####"
+    yield
+    puts '####################'
   end
 end

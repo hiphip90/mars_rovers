@@ -41,18 +41,18 @@ class Game
 
   def print_help_message
     puts '##### Available commands #####'
-    puts "\th - show this message"
-    puts "\tdeploy - send new rover to Mars"
-    puts "\tlist - list rovers on Mars"
-    puts "\t\%rover_id\% - open comm channel with specified rover"
+    puts "h - show this message"
+    puts "deploy - send new rover to Mars"
+    puts "list - list rovers on Mars"
+    puts "\%rover_id\% - open comm channel with specified rover"
     puts '##############################'
   end
 
-  def print_rover_help_message
+  def print_rover_help_message(rover_id)
     puts '##### Available rover commands #####'
-    puts "\th - show this message"
-    puts "\tbreak - disconnect from rover"
-    puts mission_control.report_rover_manual
+    puts "h - show this message"
+    puts "break - disconnect from rover"
+    puts mission_control.report_rover_manual(rover_id)
     puts '##############################'
   end
 
@@ -63,12 +63,12 @@ class Game
       command = gets.chomp
       case command
       when 'h'
-        print_rover_help_message
+        print_rover_help_message(rover_id)
       when 'break'
         puts '##### Disconnected from rover, back to mission control #####'
         break
       else
-        mission_control.send_instructions_to_rover(rover_id, command)
+        mission_control.send_command_to_rover(rover_id, command)
       end
       mission_control.report_rover_position(rover_id)
     end
