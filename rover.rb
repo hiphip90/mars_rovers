@@ -1,10 +1,10 @@
 class Rover
   attr_accessor :id, :x, :y, :heading, :chassis, :control_unit
 
-  def initialize(id)
+  def initialize(id, x, y)
     @id = id
-    @x = 0
-    @y = 0
+    @x = x
+    @y = y
     @heading = 'N'
   end
 

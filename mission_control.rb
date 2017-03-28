@@ -40,12 +40,21 @@ class MissionControl
     rover.report_position
   end
 
+  def tile_free?(x, y)
+    return false if (x < 0 || y < 0)
+    rovers.none? { |rover| rover.x == x && rover.y == y }
+  end
+
   private
 
   def assemble_new_rover
-    rover = Rover.new(next_id)
+    rover = Rover.new(next_id, *determine_landing_site)
     rover.chassis = RoverChassis.new(rover)
     rover.control_unit = RoverControlUnit.new(rover.chassis, rover)
     rover
+  end
+
+  def determine_landing_site
+    (0..Float::INFINITY).each { |x| return [x,0] if tile_free?(x, 0) }
   end
 end

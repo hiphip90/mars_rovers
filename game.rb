@@ -58,17 +58,17 @@ class Game
 
   def talk_to_rover_loop(rover_id)
     system "clear" or system "cls"
-    puts '##### Print instructions to send to rover. Print "h" for list of valid instructions #####'
+    puts '##### Print commands to send to rover. Print "h" for list of valid commands #####'
     loop do
-      instructions = gets.chomp
-      case instructions
+      command = gets.chomp
+      case command
       when 'h'
         print_rover_help_message
       when 'break'
         puts '##### Disconnected from rover, back to mission control #####'
         break
       else
-        mission_control.send_instructions_to_rover(rover_id, instructions)
+        mission_control.send_instructions_to_rover(rover_id, command)
       end
       mission_control.report_rover_position(rover_id)
     end
@@ -76,8 +76,3 @@ class Game
 end
 
 Game.new.start
-
-
-
-
-
