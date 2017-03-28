@@ -1,3 +1,5 @@
+require_relative '../rover'
+
 class Rover::GuidanceUnit
   CLOCKWISE_COMPASS = %w(N E S W).freeze
   COUNTERCLOCKWISE_COMPASS = %w(N W S E).freeze

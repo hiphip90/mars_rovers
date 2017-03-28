@@ -4,9 +4,13 @@ require_relative '../lib/rover/factory'
 
 describe Rover do
   let(:rover_factory) { double(Rover::Factory) }
-  let(:mission_control) { MissionControl.new(rover_factory) }
+  let(:mission_control) { MissionControl.new }
   let(:rover) { double(Rover, id: 1, x: 0, y: 0) }
   let(:other_rover) { double(Rover, id: 2, x: 1, y: 0) }
+
+  before do
+    mission_control.rover_factory = rover_factory
+  end
 
   describe('.new') do
     it 'sets next_id' do

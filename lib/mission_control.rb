@@ -1,9 +1,8 @@
 class MissionControl
-  attr_reader :rovers, :rover_factory
-  attr_accessor :next_id
+  attr_reader :rovers
+  attr_accessor :next_id, :rover_factory
 
-  def initialize(rover_factory)
-    @rover_factory = rover_factory
+  def initialize
     @rovers = []
     @next_id = 1
   end

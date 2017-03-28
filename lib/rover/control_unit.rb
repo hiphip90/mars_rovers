@@ -1,3 +1,5 @@
+require_relative '../rover'
+
 class Rover::ControlUnit
   attr_accessor :chassis, :rover, :guidance_unit
 

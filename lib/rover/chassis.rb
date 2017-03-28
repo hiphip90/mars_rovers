@@ -1,3 +1,5 @@
+require_relative '../rover'
+
 class Rover::Chassis
   attr_reader :rover
 
