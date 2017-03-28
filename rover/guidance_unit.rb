@@ -37,6 +37,8 @@ class Rover::GuidanceUnit
     return x, y, new_heading
   end
 
+  private
+
   def change_heading(heading, compass)
     current_azimuth = compass.find_index(heading)
     compass.rotate(current_azimuth + 1).first

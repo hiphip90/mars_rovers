@@ -17,7 +17,7 @@ class Rover::ControlUnit
   end
 
   def execute_command(command)
-    if /\A(?<x>\d) (?<y>\d)(?<heading> [NESW])?\z/ =~ command
+    if /\A(?<x>\d)\w(?<y>\d)\w?(?<heading>[NESW])?\z/ =~ command
       move_to(x.to_i, y.to_i, heading)
     elsif /\A[LRM]+\z/ =~ command
       execute_movement_instructions(command)
