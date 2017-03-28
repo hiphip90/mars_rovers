@@ -1,10 +1,13 @@
 require_relative 'mission_control'
+require_relative 'rover/factory'
 
 class Game
   attr_reader :mission_control
 
   def initialize
     @mission_control = MissionControl.new
+    rover_factory = Rover::Factory.new(mission_control)
+    mission_control.rover_factory = rover_factory
   end
 
   def start

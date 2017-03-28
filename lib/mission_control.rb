@@ -1,19 +1,15 @@
-require_relative 'rover'
-require_relative 'rover/chassis'
-require_relative 'rover/control_unit'
-require_relative 'rover/guidance_unit'
-
 class MissionControl
-  attr_reader :rovers
+  attr_reader :rovers, :rover_factory
   attr_accessor :next_id
 
-  def initialize
+  def initialize(rover_factory)
+    @rover_factory = rover_factory
     @rovers = []
     @next_id = 1
   end
 
   def deploy_new_rover
-    rover = assemble_new_rover
+    rover = rover_factory.fabricate_rover(next_id, *determine_landing_site)
     rovers << rover
     self.next_id += 1
     rover.report_position
@@ -47,14 +43,6 @@ class MissionControl
   end
 
   private
-
-  def assemble_new_rover
-    rover = Rover.new(next_id, *determine_landing_site)
-    rover.chassis = Rover::Chassis.new(rover)
-    guidance_unit = Rover::GuidanceUnit.new(self, rover)
-    rover.control_unit = Rover::ControlUnit.new(rover, rover.chassis, guidance_unit)
-    rover
-  end
 
   def determine_landing_site
     (0..Float::INFINITY).each { |x| return [x,0] if tile_free?(x, 0) }

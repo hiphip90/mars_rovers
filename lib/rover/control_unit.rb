@@ -47,10 +47,10 @@ class Rover::ControlUnit
   end
 
   def move_to(x, y, heading)
-    if guidance_unit.destination_obstructed?(x, y)
-      report_obstructed
-    else
+    if guidance_unit.valid_destination?(x, y)
       chassis.move_to(x, y, heading)
+    else
+      report_obstructed
     end
   end
 

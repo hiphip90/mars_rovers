@@ -9,8 +9,8 @@ class Rover::GuidanceUnit
     @rover = rover
   end
 
-  def destination_obstructed?(x, y)
-    !mission_control.tile_free?(x, y, rover.id)
+  def valid_destination?(x, y)
+    mission_control.tile_free?(x, y, rover.id)
   end
 
   def move_ahead(x, y, heading)

@@ -44,12 +44,4 @@ describe Rover do
       rover.report_manual
     end
   end
-
-  describe('#report_manual') do
-    it 'delegates to #report_manual of control unit' do
-      expect(control_unit).to receive(:report_manual)
-
-      rover.report_manual
-    end
-  end
 end
