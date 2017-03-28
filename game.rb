@@ -1,45 +1,83 @@
 require_relative 'mission_control'
 
-mission_control = MissionControl.new
+class Game
+  attr_reader :mission_control
 
-puts '##### WELCOME TO MARS #####'
-puts '##### Print "h" to get help #####'
+  def initialize
+    @mission_control = MissionControl.new
+  end
 
-loop do
-  command = gets.chomp
-  case command
-  when 'h'
+  def start
+    puts '##### WELCOME TO MARS #####'
+    puts '##### Print "h" to get help #####'
+    main_loop
+  end
+
+  private
+
+  def main_loop
+    loop do
+      command = gets.chomp
+      case command
+      when 'h'
+        print_help_message
+      when 'deploy'
+        mission_control.deploy_new_rover
+      when 'list'
+        mission_control.list_rovers
+      when /\A\d+\z/
+        rover_id = command.to_i
+        if mission_control.open_comm_channel_with_rover(rover_id)
+          talk_to_rover_loop(rover_id)
+        else
+          puts 'This rover does not exist! Please select existing rover, or deploy a new one via deploy command'
+          mission_control.list_rovers
+        end
+      else
+        puts 'Unknown command'
+      end
+    end
+  end
+
+  def print_help_message
     puts '##### Available commands #####'
     puts "\th - show this message"
     puts "\tdeploy - send new rover to Mars"
     puts "\tlist - list rovers on Mars"
     puts "\t\%rover_id\% - open comm channel with specified rover"
     puts '##############################'
-  when 'deploy'
-    mission_control.deploy_new_rover
-  when 'list'
-    mission_control.list_rovers
-  when /\A\d+\z/
-    if mission_control.open_comm_channel_with_rover(command.to_i)
-      puts '##### Print instructions to send #####'
+  end
+
+  def print_rover_help_message
+    puts '##### Available rover commands #####'
+    puts "\th - show this message"
+    puts "\tbreak - disconnect from rover"
+    puts mission_control.report_rover_manual
+    puts '##############################'
+  end
+
+  def talk_to_rover_loop(rover_id)
+    system "clear" or system "cls"
+    puts '##### Print instructions to send to rover. Print "h" for list of valid instructions #####'
+    loop do
       instructions = gets.chomp
       case instructions
       when 'h'
-        puts '##### Available rover commands #####'
-        puts "\th - show this message"
-        puts "\tL - turn counterclockwise. Can be combined with R, M in one instruction"
-        puts "\tR - turn clockwise. Can be combined with L, M in one instruction"
-        puts "\tM - move ahead. Can be combined with L, R in one instruction"
-        puts "\t\%X\% \%Y\% [\%heading\%] - go to coordinates. Heading is optional. If heading is present (must be one of N, E, S, W) will change heading, otherwise keep current heading"
-        puts '##############################'
+        print_rover_help_message
+      when 'break'
+        puts '##### Disconnected from rover, back to mission control #####'
+        break
       else
-        mission_control.send_instructions_to_rover(command.to_i, instructions)
+        mission_control.send_instructions_to_rover(rover_id, instructions)
       end
-    else
-      puts 'This rover does not exist! Please select existing rover, or deploy a new one via deploy_rover.'
-      mission_control.list_rovers
+      mission_control.report_rover_position(rover_id)
     end
-  else
-    puts 'Unknown command'
   end
 end
+
+Game.new.start
+
+
+
+
+

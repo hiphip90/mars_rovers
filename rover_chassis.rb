@@ -8,10 +8,10 @@ class RoverChassis
     @rover = rover
   end
 
-  def move_to(x, y, heading)
+  def move_to(x, y, heading = nil)
     rover.x = x
     rover.y = y
-    rover.heading = heading
+    rover.heading = heading unless heading.nil?
   end
 
   def move_ahead

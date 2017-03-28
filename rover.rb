@@ -10,7 +10,10 @@ class Rover
 
   def receive(instructions)
     control_unit.execute_instructions(instructions)
-    report_position
+  end
+
+  def report_manual
+    control_unit.report_manual
   end
 
   def report_position
