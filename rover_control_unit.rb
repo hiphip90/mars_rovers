@@ -8,7 +8,7 @@ class RoverControlUnit
 
   def execute_instructions(instructions)
     if /\A(?<x>\d) (?<y>\d) (?<heading>[NESW])?\z/ =~ instructions
-      chassis.move_to(x, y, heading)
+      chassis.move_to(x.to_i, y.to_i, heading)
     elsif /\A[LRM]+\z/ =~ instructions
       instructions.each_char { |action| perform_action(action) }
     else

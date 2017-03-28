@@ -10,6 +10,7 @@ class Rover
 
   def receive(instructions)
     control_unit.execute_instructions(instructions)
+    report_position
   end
 
   def report_position
@@ -24,5 +25,9 @@ class Rover
     puts "##### Rover ##{id} #####"
     puts 'Unknown instruction, standing by'
     puts '####################'
+  end
+
+  def <=>(other)
+    id <=> other.id
   end
 end

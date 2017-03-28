@@ -1,32 +1,45 @@
-require_relative 'rover'
-require_relative 'rover_chassis'
-require_relative 'rover_control_unit'
+require_relative 'mission_control'
 
-class Game
-  attr_reader :rovers
+mission_control = MissionControl.new
 
-  def initialize
-    @rovers = []
-  end
+puts '##### WELCOME TO MARS #####'
+puts '##### Print "h" to get help #####'
 
-  def add_rover(id)
-    rover = Rover.new(id)
-    rover.chassis = RoverChassis.new(rover)
-    rover.control_unit = RoverControlUnit.new(rover.chassis, rover)
-    rovers << rover
-  end
-
-  def send_instructions_to_rover(id, instructions)
-    rover = rovers.find { |rover| rover.id == id }
-    if rover
-      rover.receive(instructions)
+loop do
+  command = gets.chomp
+  case command
+  when 'h'
+    puts '##### Available commands #####'
+    puts "\th - show this message"
+    puts "\tdeploy - send new rover to Mars"
+    puts "\tlist - list rovers on Mars"
+    puts "\t\%rover_id\% - open comm channel with specified rover"
+    puts '##############################'
+  when 'deploy'
+    mission_control.deploy_new_rover
+  when 'list'
+    mission_control.list_rovers
+  when /\A\d+\z/
+    if mission_control.open_comm_channel_with_rover(command.to_i)
+      puts '##### Print instructions to send #####'
+      instructions = gets.chomp
+      case instructions
+      when 'h'
+        puts '##### Available rover commands #####'
+        puts "\th - show this message"
+        puts "\tL - turn counterclockwise. Can be combined with R, M in one instruction"
+        puts "\tR - turn clockwise. Can be combined with L, M in one instruction"
+        puts "\tM - move ahead. Can be combined with L, R in one instruction"
+        puts "\t\%X\% \%Y\% [\%heading\%] - go to coordinates. Heading is optional. If heading is present (must be one of N, E, S, W) will change heading, otherwise keep current heading"
+        puts '##############################'
+      else
+        mission_control.send_instructions_to_rover(command.to_i, instructions)
+      end
     else
-      puts 'This rover does not exist! Please select existing rover, or send a new one via add_rover.'
-      list_rovers
+      puts 'This rover does not exist! Please select existing rover, or deploy a new one via deploy_rover.'
+      mission_control.list_rovers
     end
-  end
-
-  def list_rovers
-    rovers.to_s
+  else
+    puts 'Unknown command'
   end
 end
