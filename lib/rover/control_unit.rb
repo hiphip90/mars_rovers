@@ -10,12 +10,10 @@ class Rover::ControlUnit
   end
 
   def report_manual
-    rover.report do
-      puts "L - turn 90 degrees counterclockwise. Can be combined with R, M in one instruction"
-      puts "R - turn 90 degrees clockwise. Can be combined with L, M in one instruction"
-      puts "M - move ahead 1 tile. Can be combined with L, R in one instruction"
-      puts "\%X\% \%Y\% [\%heading\%] - go to coordinates. Heading is optional. If heading is present (must be one of N, E, S, W) will change heading, otherwise keep current heading"
-    end
+    puts "L - turn 90 degrees counterclockwise. Can be combined with R, M in one instruction"
+    puts "R - turn 90 degrees clockwise. Can be combined with L, M in one instruction"
+    puts "M - move ahead 1 tile. Can be combined with L, R in one instruction"
+    puts "\%X\% \%Y\% [\%heading\%] - go to coordinates. Heading is optional. If heading is present (must be one of N, E, S, W) will change heading, otherwise keep current heading"
   end
 
   def execute_command(command)

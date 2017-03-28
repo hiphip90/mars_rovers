@@ -43,20 +43,24 @@ class Game
   end
 
   def print_help_message
+    puts
     puts '##### Available commands #####'
     puts "h - show this message"
     puts "deploy - send new rover to Mars"
     puts "list - list rovers on Mars"
     puts "\%rover_id\% - open comm channel with specified rover"
     puts '##############################'
+    puts
   end
 
   def print_rover_help_message(rover_id)
+    puts
     puts '##### Available rover commands #####'
     puts "h - show this message"
     puts "break - disconnect from rover"
     puts mission_control.report_rover_manual(rover_id)
     puts '##############################'
+    puts
   end
 
   def talk_to_rover_loop(rover_id)

@@ -29,8 +29,10 @@ class Rover
   end
 
   def report
+    puts
     puts "##### Rover ##{id} speaking #####"
     yield
     puts '####################'
+    puts
   end
 end
