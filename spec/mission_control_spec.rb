@@ -2,7 +2,7 @@ require_relative '../lib/mission_control'
 require_relative '../lib/rover'
 require_relative '../lib/rover/factory'
 
-describe Rover do
+describe MissionControl do
   let(:rover_factory) { double(Rover::Factory) }
   let(:mission_control) { MissionControl.new }
   let(:rover) { double(Rover, id: 1, x: 0, y: 0) }
